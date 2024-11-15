@@ -2,7 +2,7 @@ import TvConsole from "./Console";
 
 const TvPanel = () => {
   return (
-    <div className="p-4 grid place-items-center">
+    <div className="grid place-items-center p-2">
       <TvConsole />
     </div>
   );
