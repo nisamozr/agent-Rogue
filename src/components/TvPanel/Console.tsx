@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Power, ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import StaticScreen from "./StaticScreen";
 import { cn } from "@/lib/utils";
 import { IMAGES } from "@/assets";
@@ -126,17 +126,18 @@ const TvConsole = () => {
           >
             <ChevronDown className="h-4 w-4" />
           </Button>
+
           <Button
             variant="outline"
             size="icon"
-            className={`rounded-full w-7 h-7 -md:w-5 -md:h-5 ${
+            className={`rounded-full w-10 h-10 -md:w-5 -md:h-5 p-0 transition-all duration-700 ${
               power
                 ? "bg-red-500 hover:bg-red-600 text-white hover:text-white"
                 : "bg-zinc-500 hover:bg-zinc-400 text-white"
             }`}
             onClick={() => setPower(!power)}
           >
-            <Power className="h-2 w-2 p-[2px]" />
+            <img src={IMAGES.img_power_btn} alt="power button" />
           </Button>
         </div>
       </div>
