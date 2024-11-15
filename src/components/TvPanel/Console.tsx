@@ -74,7 +74,7 @@ const TvConsole = () => {
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen={true}
         />
-        <div className="absolute top-6 right-4 bg-black/50 text-white px-2 py-1 rounded">
+        <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded -md:text-xs">
           CH-{channel}: {currentChannel.title}
         </div>
       </div>
@@ -82,7 +82,7 @@ const TvConsole = () => {
   };
 
   return (
-    <div className="w-11/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0">
+    <div className="w-11/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0 -md:grid-rows-[1fr_25px]">
       <div
         className={cn(
           "w-full h-full border-4 border-zinc-900 overflow-hidden transition-all",
@@ -99,10 +99,10 @@ const TvConsole = () => {
       </div>
       {/* TV Brand */}
       <div className="flex p-2 justify-between items-center">
-        <span className="text-zinc-500 font-bold  text-lg">
-          RETRO-AGENT-90
+        <span className="text-zinc-500 font-bold  text-lg -md:text-xs">
+          RETRO-90
         </span>
-        <div className="w-[350px] h-[20px] rounded-2xl overflow-hidden">
+        <div className="w-[30%] h-[20px] rounded-2xl overflow-hidden -md:h-[10px]">
           <img
             src={IMAGES.img_speaker}
             alt="speaker"
@@ -113,7 +113,7 @@ const TvConsole = () => {
           <Button
             variant="outline"
             size="icon"
-            className="bg-zinc-500 hover:bg-zinc-400 w-10 h-6 text-white"
+            className="bg-zinc-500 hover:bg-zinc-400 w-10 h-6 text-white -md:h-4 -md:w-7"
             onClick={() => handleChannelChange("up")}
           >
             <ChevronUp className="h-4 w-4" />
@@ -121,7 +121,7 @@ const TvConsole = () => {
           <Button
             variant="outline"
             size="icon"
-            className="bg-zinc-500  hover:bg-zinc-400 w-10 h-6 text-white"
+            className="bg-zinc-500  hover:bg-zinc-400 w-10 h-6 text-white -md:h-4 -md:w-7"
             onClick={() => handleChannelChange("down")}
           >
             <ChevronDown className="h-4 w-4" />
@@ -129,7 +129,7 @@ const TvConsole = () => {
           <Button
             variant="outline"
             size="icon"
-            className={`rounded-full w-7 h-7 ${
+            className={`rounded-full w-7 h-7 -md:w-5 -md:h-5 ${
               power
                 ? "bg-red-500 hover:bg-red-600 text-white hover:text-white"
                 : "bg-zinc-500 hover:bg-zinc-400 text-white"
