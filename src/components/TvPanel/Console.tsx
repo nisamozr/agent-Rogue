@@ -1,27 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Power, ChevronUp, ChevronDown } from "lucide-react";
+import StaticScreen from "./StaticScreen";
+import { cn } from "@/lib/utils";
 
 // Channel content mapping
 const channels = {
   1: {
     type: "video",
-    url: "https://www.youtube.com/embed/o2VA9c8Z7FA?autoplay=1&mute=1&loop=1",
+    url: "https://www.youtube.com/embed/o2VA9c8Z7FA?autoplay=1&loop=1",
     title: "AGENT NEWS",
   },
   2: {
     type: "video",
-    url: "https://www.youtube.com/embed/TQllQlElpz8?autoplay=1&mute=1&loop=1",
+    url: "https://www.youtube.com/embed/TQllQlElpz8?autoplay=1&loop=1",
     title: "Family Guy",
   },
   3: {
     type: "video",
-    url: "https://www.youtube.com/embed/SiW5oTl_inA?autoplay=1&mute=1&loop=1",
+    url: "https://www.youtube.com/embed/SiW5oTl_inA?autoplay=1&loop=1",
     title: "Sports Channel",
   },
   4: {
     type: "video",
-    url: "https://www.youtube.com/embed/HWsUOUR6c2c?autoplay=1&mute=1&loop=1",
+    url: "https://www.youtube.com/embed/HWsUOUR6c2c?autoplay=1&loop=1",
     title: "Music Channel",
   },
 };
@@ -32,7 +34,6 @@ const TvConsole = () => {
 
   useEffect(() => {
     if (power) {
-      setStaticEffect(true);
       const timer = setTimeout(() => setStaticEffect(false), 1000);
       return () => clearTimeout(timer);
     }
@@ -51,18 +52,18 @@ const TvConsole = () => {
       );
     }
   };
+  const currentChannel = useMemo(() => {
+    //@ts-ignore
+    return channels[channel];
+  }, [channel]);
 
   const renderContent = () => {
     if (!power) return null;
     if (staticEffect) {
       return null;
     }
-
-    //@ts-ignore
-    const currentChannel = channels[channel as any];
-    console.log("cuurent chan", currentChannel);
     return (
-      <div className="relative w-full h-full">
+      <div className={cn("relative w-full h-full")}>
         <iframe
           width="100%"
           height="100%"
@@ -72,7 +73,7 @@ const TvConsole = () => {
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen={true}
         />
-        <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded">
+        <div className="absolute top-6 right-4 bg-black/50 text-white px-2 py-1 rounded">
           CH-{channel}: {currentChannel.title}
         </div>
       </div>
@@ -83,18 +84,17 @@ const TvConsole = () => {
     <div className=" w-10/12 max-w-[900px] h-[80dvh] max-h-[600px] pb-[1.5rem] bg-accent border-4 rounded-lg relative overflow-hidden p-4">
       {/* Screen */}
       <div
-        className={`w-full h-[95%] mx-auto  border-8 border-zinc-900 rounded-lg overflow-hidden
-          ${!power ? "bg-black" : "bg-zinc-900"}`}
+        className={cn(
+          "w-full h-[95%] mx-auto  border-8 border-zinc-900 rounded-lg overflow-hidden transition-all",
+          !power ? "bg-black" : "bg-zinc-900"
+        )}
       >
         <div
-          className={`w-full h-full flex items-center justify-center rounded-md 
-            ${
-              staticEffect
-                ? "bg-[repeating-radial-gradient(circle,#757575,#383838_2px,#272727_3px,#676767_4px)]"
-                : ""
-            }`}
+          className={cn(
+            "w-full h-full flex items-center justify-center rounded-md overflow-hidden relative"
+          )}
         >
-          {renderContent()}
+          {staticEffect ? <StaticScreen /> : renderContent()}
         </div>
       </div>
 
