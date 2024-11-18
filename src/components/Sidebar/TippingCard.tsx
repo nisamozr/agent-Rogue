@@ -19,6 +19,7 @@ const TippingCard = ({ close }: { close: any }) => {
 
 
   const sendTip = async () => {
+    console.log(Number(tokenBalance) , Number(amount))
     if (amount == "") {
       toast({
         title: "Enter your Amount",
@@ -26,7 +27,7 @@ const TippingCard = ({ close }: { close: any }) => {
         // description: "Friday, February 10, 2023 at 5:57 PM",
       });
       return false;
-    } else if (Number(tokenBalance) < Number(amount)) {
+    } else if (Number(tokenBalance) < Number(amount) || tokenBalance == null) {
       toast({
         title: "Insufficient Balance for Transfer. ",
 

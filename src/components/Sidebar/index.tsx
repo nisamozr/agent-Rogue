@@ -29,7 +29,11 @@ const Sidebar = () => {
         "-md:hidden"
       )}
     >
-      <div className={`flex ${isConnected ? " justify-between" : "justify-end"}  py-4`}>
+      <div
+        className={`flex ${
+          isConnected ? " justify-between" : "justify-end"
+        }  py-4`}
+      >
         {!hideSidebar && isConnected ? (
           <div onClick={() => open()}>
             <Avatar
@@ -41,7 +45,6 @@ const Sidebar = () => {
         ) : null}
 
         {hideSidebar ? (
-         
           <img
             className="cursor-pointer"
             onClick={() => setHideSidebar((prev) => !prev)}
@@ -50,6 +53,7 @@ const Sidebar = () => {
           />
         ) : (
           <X
+            className="cursor-pointer"
             onClick={() => setHideSidebar((prev) => !prev)}
             width={25}
             height={25}
