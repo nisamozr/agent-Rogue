@@ -79,6 +79,8 @@ const TippingCard = ({ close }: { close: any }) => {
       <div className="relative w-full">
         <Input
           // className="py-4 px-4"
+          className="pr-[70px] hover:border-[#B5B6B7] hover:bg-[#303030]"
+
           value={amount}
           type="number"
           placeholder="0.00"

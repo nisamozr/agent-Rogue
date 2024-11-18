@@ -32,14 +32,15 @@ const Sidebar = () => {
       <div
         className={`flex ${
           isConnected ? " justify-between" : "justify-end"
-        }  py-4`}
+        }  py-2`}
       >
         {!hideSidebar && isConnected ? (
           <div onClick={() => open()}>
             <Avatar
-              className="cursor-pointer"
-              style={{ width: "40px", height: "40px" }}
+              className="cursor-pointer rounded-none"
+              style={{ width: "32px", height: "32px" }}
               {...config}
+              shape="square"
             />
           </div>
         ) : null}
@@ -55,15 +56,15 @@ const Sidebar = () => {
           <X
             className="cursor-pointer"
             onClick={() => setHideSidebar((prev) => !prev)}
-            width={25}
-            height={25}
+            width={20}
+            height={20}
           />
         )}
       </div>
       {!hideSidebar && (
         <>
-          <div className="h-full py-4 gap-4">
-            <div className="flex flex-col gap-4 h-full">
+          <div className="h-full py-4 gap-10">
+            <div className="flex flex-col gap-5 h-full">
               <Tabs />
               <div className="flex-1  h-4">
                 {sidebarMenu === "globel" ? <GlobelBox /> : <TeerminalBox />}

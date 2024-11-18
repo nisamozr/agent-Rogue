@@ -6,15 +6,26 @@ import { trimAddress } from "@/lib/utils";
 import { SendHorizontalIcon } from "lucide-react";
 import { ICONS } from "@/assets";
 import TippingCard from "./TippingCard";
+import { useAppCtx } from "@/context/app.contex";
+import { useToast } from "@/hooks/use-toast";
 
 const GlobelBox = () => {
   const { address, isConnected } = useAppKitAccount();
   const [showTipAgent, setsTipAgent] = useState(false);
+  const { disableAction } = useAppCtx();
+  const { toast } = useToast();
 
   const [globalMessages, setGlobalMessages] = useState<any>([]);
   const [message, setChatMessage] = useState("");
 
   const handleSend = () => {
+    if (message === "") {
+      toast({
+        title: "Enter your message",
+
+      });
+      return false;
+    }
     console.log("dfdf");
     if (message.trim()) {
       setGlobalMessages([
@@ -47,36 +58,37 @@ const GlobelBox = () => {
           </div>
         ))}
       </div>
-      {
-        showTipAgent?
-        <TippingCard close={setsTipAgent} />
-:null
-      }
+      {showTipAgent ? <TippingCard close={setsTipAgent} /> : null}
       {isConnected ? (
         <div className="flex gap-2">
           <div className="relative w-full">
             <Input
-            className="pr-[40px "
+              className="pr-[40px] hover:border-[#B5B6B7] hover:bg-[#303030]"
               value={message}
               type="text"
               placeholder="Start typing…"
+              disabled={disableAction}
               onChange={(e) => setChatMessage(e.target.value)}
               onKeyPress={handleKeyPress}
             />
-            <Button onClick={handleSend} variant={"ghost"} className="absolute right-0 top-0">
+            <Button
+              disabled={disableAction}
+              onClick={handleSend}
+              variant={"ghost"}
+              className="absolute right-0 top-0"
+            >
               <SendHorizontalIcon />
             </Button>
           </div>
-          {
-            showTipAgent ?null :
-          <Button
-            onClick={() => setsTipAgent(true)}
-            className="bg-[#0842A0] border-[2px] border-[#B5B6B7] hover:bg-[#0842A0] "
-          >
-            <img src={ICONS.icon_tip__btn} alt="" />
-          </Button>
-          }
-
+          {showTipAgent ? null : (
+            <Button
+              disabled={disableAction}
+              onClick={() => setsTipAgent(true)}
+              className="bg-[#0842A0] border-[2px] border-[#B5B6B7] hover:bg-[#0842A0] "
+            >
+              <img src={ICONS.icon_tip__btn} alt="" />
+            </Button>
+          )}
         </div>
       ) : null}
     </div>
