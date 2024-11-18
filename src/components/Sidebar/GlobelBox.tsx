@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useAppKitAccount } from "@reown/appkit/react";
@@ -18,7 +18,7 @@ const GlobelBox = () => {
   const { toast } = useToast();
   const messages = useQuery(api.functions.chats.getChats);
   const sends = useMutation(api.functions.chats.send);
-
+  const boxRef: any = useRef(null)
   const [message, setChatMessage] = useState("");
   // console.log(messages ? messages :"ddfd","messages")
   const handleSend = () => {
@@ -39,9 +39,19 @@ const GlobelBox = () => {
       handleSend();
     }
   };
+
+   useEffect(() => {
+    // Scroll to the bottom whenever logs change
+    if (boxRef.current) {
+      boxRef.current.scrollTo({
+        top: boxRef.current.scrollHeight,
+        behavior: 'smooth',
+      })
+    }
+  }, [messages])
   return (
     <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
-      <div className="flex flex-col   gap-2 overflow-auto h-full bg-muted p-4 ">
+      <div ref={boxRef} className="flex flex-col flex-1   gap-2 overflow-auto h-full bg-muted p-4 ">
         {messages?.map(
           ({
             _id,
@@ -63,6 +73,8 @@ const GlobelBox = () => {
             </div>
           )
         )}
+       
+        
       </div>
       {showTipAgent ? <TippingCard close={setsTipAgent} /> : null}
       {isConnected ? (

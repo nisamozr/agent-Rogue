@@ -23,14 +23,14 @@ const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "h-full px-4 py-2 flex bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col ",
+        "h-full gap-4 px-4 py-2 flex bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col ",
         "transition-all duration-300 ease-in-out",
         hideSidebar ? "w-[auto]" : "w-[400px]",
         "-md:hidden"
       )}
     >
       <div
-        className={`flex ${
+        className={`flex  ${
           isConnected ? " justify-between" : "justify-end"
         }  py-2`}
       >
@@ -61,28 +61,28 @@ const Sidebar = () => {
           />
         )}
       </div>
-      {!hideSidebar && (
-        <>
-          <div className="h-full py-4 gap-10">
-            <div className="flex flex-col gap-5 h-full">
-              <Tabs />
-              <div className="flex-1  h-4">
-                {sidebarMenu === "globel" ? <GlobelBox /> : <TeerminalBox />}
+
+      <div className="h-full  ">
+        {!hideSidebar && (
+          <div className="flex flex-col gap-5 h-full">
+            <Tabs />
+            <div className="grow  h-4">
+              {sidebarMenu === "globel" ? <GlobelBox /> : <TeerminalBox />}
+            </div>
+            {isConnected ? null : (
+              <div>
+                <ConnectWallet />
               </div>
-              {isConnected ? null : (
-                <div>
-                  <ConnectWallet />
-                </div>
-              )}
+            )}
+
+            <div className="flex justify-between items-center">
+              <p className="text-[14px] ">$host: {tokenBalance ?? 0}</p>
+
+              <Button variant={"ghost"}>Learn more</Button>
             </div>
           </div>
-          <div className="flex justify-between items-center">
-            <p className="text-[14px] ">$host: {tokenBalance ?? 0}</p>
-
-            <Button variant={"ghost"}>Learn more</Button>
-          </div>
-        </>
-      )}
+        )}
+      </div>
     </aside>
   );
 };
