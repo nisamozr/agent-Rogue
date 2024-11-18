@@ -13,7 +13,7 @@ const Sidebar = () => {
       className={cn(
         "h-full px-4 py-2 flex bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col border-r border-l",
         "transition-all duration-300 ease-in-out",
-        hideSidebar ? "w-[auto]" : "w-[300px]",
+        hideSidebar ? "w-[auto]" : "w-[400px]",
         "-md:hidden"
       )}
     >

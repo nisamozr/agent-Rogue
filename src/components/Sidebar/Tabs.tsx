@@ -3,12 +3,12 @@ import { Button } from "../ui/button";
 
 const Tabs = () => {
   const types = ["globel", "terminal"];
-  const { setSidebarMenu } = useAppCtx();
+  const { setSidebarMenu ,sidebarMenu} = useAppCtx();
 
   return (
-    <div className="gap-4 flex">
+    <div className="gap-2 flex">
       {types.map((tab) => (
-        <Button className="uppercase" variant="outline" onClick={()=>setSidebarMenu(tab)}>
+        <Button className="uppercase w-full rounded-none" variant={sidebarMenu === tab ? "active":"outline" } onClick={()=>setSidebarMenu(tab)}>
           {tab}
         </Button>
       ))}

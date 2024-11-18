@@ -27,10 +27,10 @@ const GlobelBox = () => {
     }
   };
   return (
-    <div className=" border rounded-md flex flex-col  h-full justify-between p-4 overflow-auto ">
-      <div className="flex flex-col  gap-2 overflow-auto">
+    <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
+      <div className="flex flex-col   gap-2 overflow-auto h-full bg-muted p-4 ">
         {globalMessages.map((message: any) => (
-          <div className="flex gap-2">
+          <div className="flex gap-2 ">
             <p className="text-sm">{trimAddress(message?.name)}:</p>
             <p className="text-sm text-wrap font-medium">{message?.message}</p>
           </div>
@@ -39,7 +39,7 @@ const GlobelBox = () => {
       {/* <TippingCard/> */}
       <div className="flex gap-2">
         <Input
-        value={message}
+          value={message}
           type="text"
           placeholder="message"
           onChange={(e) => setChatMessage(e.target.value)}
