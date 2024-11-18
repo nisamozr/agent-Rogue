@@ -8,30 +8,28 @@ import { ICONS } from "@/assets";
 import TippingCard from "./TippingCard";
 import { useAppCtx } from "@/context/app.contex";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const GlobelBox = () => {
   const { address, isConnected } = useAppKitAccount();
   const [showTipAgent, setsTipAgent] = useState(false);
   const { disableAction } = useAppCtx();
   const { toast } = useToast();
+  const messages = useQuery(api.functions.chats.getChats);
+  const sends = useMutation(api.functions.chats.send);
 
-  const [globalMessages, setGlobalMessages] = useState<any>([]);
   const [message, setChatMessage] = useState("");
-
+  // console.log(messages ? messages :"ddfd","messages")
   const handleSend = () => {
     if (message === "") {
       toast({
         title: "Enter your message",
-
       });
       return false;
     }
-    console.log("dfdf");
     if (message.trim()) {
-      setGlobalMessages([
-        ...globalMessages,
-        { name: address, message: message },
-      ]);
+      sends({ user: address, text: message });
       setChatMessage(""); // Clear the input after sending
     }
   };
@@ -44,19 +42,27 @@ const GlobelBox = () => {
   return (
     <div className="   flex flex-col gap-4  h-full justify-between overflow-auto ">
       <div className="flex flex-col   gap-2 overflow-auto h-full bg-muted p-4 ">
-        {globalMessages.map((message: any) => (
-          <div className="flex gap-2 items-center">
-            <p className="text-[14px] font-semibold">
-              {trimAddress(message?.name)}:
-            </p>
-            <p
-              className="text-sm 
+        {messages?.map(
+          ({
+            _id,
+            text,
+            user,
+          }: {
+            _id: string;
+            text: string;
+            user: string;
+          }) => (
+            <div key={_id} className="flex gap-2 items-center">
+              <p className="text-[14px] font-semibold">{trimAddress(user)}:</p>
+              <p
+                className="text-sm 
             text-wrap "
-            >
-              {message?.message}
-            </p>
-          </div>
-        ))}
+              >
+                {text}
+              </p>
+            </div>
+          )
+        )}
       </div>
       {showTipAgent ? <TippingCard close={setsTipAgent} /> : null}
       {isConnected ? (

@@ -26,5 +26,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "convex/schema.ts", "convex/functions", "convex/functions/chats.ts"]
 }

@@ -5,14 +5,17 @@ import App from "./App.tsx";
 import { AppContextProvider } from "./context/app.contex.tsx";
 import { EvmWalletProvider } from "./providers/EvmWalletProvider.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
+import ConvexServerProvider from "./providers/ConvexProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <EvmWalletProvider>
-      <AppContextProvider>
-        <App />
-        <Toaster/>
-      </AppContextProvider>
-    </EvmWalletProvider>
+    <ConvexServerProvider>
+      <EvmWalletProvider>
+        <AppContextProvider>
+          <App />
+          <Toaster />
+        </AppContextProvider>
+      </EvmWalletProvider>
+    </ConvexServerProvider>
   </StrictMode>
 );
