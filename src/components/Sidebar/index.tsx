@@ -76,11 +76,11 @@ const Sidebar = () => {
               )}
             </div>
           </div>
-          {/* <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center">
             <p className="text-[14px] ">$host: {tokenBalance ?? 0}</p>
 
             <Button variant={"ghost"}>Learn more</Button>
-          </div> */}
+          </div>
         </>
       )}
     </aside>
