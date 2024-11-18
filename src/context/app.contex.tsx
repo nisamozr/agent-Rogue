@@ -3,11 +3,11 @@ import React, { createContext, useContext, useState, useMemo } from "react";
 interface AppContextType {
   hideSidebar: boolean;
   sidebarMenu: string;
-  showTipAgent:boolean;
+  disableAction:boolean;
 
   setHideSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   setSidebarMenu: React.Dispatch<React.SetStateAction<string>>;
-  setsTipAgent: React.Dispatch<React.SetStateAction<boolean>>;
+  setDisableAction: React.Dispatch<React.SetStateAction<boolean>>;
 
 }
 
@@ -18,11 +18,11 @@ export const AppContextProvider: React.FC<{
 }> = ({ children }) => {
   const [hideSidebar, setHideSidebar] = useState(false);
   const [sidebarMenu, setSidebarMenu] = useState("globel");
-  const [showTipAgent, setsTipAgent] = useState(false);
+  const [disableAction, setDisableAction] = useState(false);
 
   const value = useMemo(
-    () => ({ hideSidebar,sidebarMenu,showTipAgent, setHideSidebar,setSidebarMenu,setsTipAgent }),
-    [hideSidebar,sidebarMenu,showTipAgent, setHideSidebar,setSidebarMenu,setsTipAgent]
+    () => ({ hideSidebar,sidebarMenu,disableAction, setHideSidebar,setSidebarMenu,setDisableAction }),
+    [hideSidebar,sidebarMenu,disableAction, setHideSidebar,setSidebarMenu,setDisableAction]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

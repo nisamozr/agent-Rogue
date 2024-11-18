@@ -15,3 +15,10 @@ export function trimAddress(address: string) {
 
   return trimmedAddress;
 }
+
+
+export const convertTokeneformatEther= (amount:any, desimal=18)=>{
+  if(amount)
+ return (BigInt(amount) / BigInt(10 ** desimal)).toString();
+
+}

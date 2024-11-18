@@ -45,7 +45,7 @@ createAppKit({
     "--w3m-border-radius-master": "1px",
     "--w3m-z-index": 999999999,
   },
-  themeMode: "light",
+  themeMode: "dark",
   features: {
     email: false, // default to true
     socials: false,
