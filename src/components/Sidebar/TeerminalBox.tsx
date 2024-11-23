@@ -30,7 +30,7 @@ const TeerminalBox = () => {
   const [topic, setTopic] = useState(""); // Default amount
   const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
-  const amount = BigInt(1 * 10 ** 6);
+  const amount = BigInt(20000 * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
 
@@ -101,7 +101,7 @@ const TeerminalBox = () => {
       //   lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
       // };
 
-      setTimeout(async() => {
+      setTimeout(async () => {
         const response = await axios.post(
           "https://agent-paywall.up.railway.app/submit-topic",
           { topic: topic, hash: signature },
@@ -121,9 +121,9 @@ const TeerminalBox = () => {
           toast({
             title: " Topic injection is successufll",
           });
-         
+
           // console.log(confirmation);
-  
+
           setStatus("Transfer successful! Signature: " + signature);
           setLoading(false);
         }
@@ -137,8 +137,6 @@ const TeerminalBox = () => {
       //     maxSupportedTransactionVersion: 0, // Support legacy and v0 transactions
       //   });
 
-       
-
       //   if (txInfo?.meta?.err) {
       //     setStatus("failed");
       //     // toast({
@@ -148,8 +146,6 @@ const TeerminalBox = () => {
       //     setStatus("success");
       //   }
       // }
-
-     
     } catch (err: any) {
       // setStatus("Error: " + err.message);
       setLoading(false);
@@ -182,7 +178,7 @@ const TeerminalBox = () => {
           onClick={transferTokens}
           disabled={loading || !connected}
         >
-          {loading ? status : `Add with 50k $ROGUE`}
+          {loading ? status : `Add with 20k $ROGUE`}
         </Button>
         <p className="text-sm text-wrap font-thin leading-6">
           <span className="font-semibold">Disclaimer:</span> Topic injection

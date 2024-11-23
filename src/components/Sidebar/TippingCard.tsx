@@ -24,7 +24,7 @@ const TippingCard = ({ close }: { close: any }) => {
   const { disableAction, setDisableAction } = useAppCtx();
   const { toast } = useToast();
   const [status, setStatus] = useState("");
-  const {  publicKey, signTransaction } = useWallet();
+  const { publicKey, signTransaction } = useWallet();
   const { balance } = useTokenBalance(publicKey);
 
   const sendTip = async () => {
@@ -35,7 +35,7 @@ const TippingCard = ({ close }: { close: any }) => {
       return false;
     }
     if (!publicKey || !signTransaction) return;
-console.log(status)
+    console.log(status);
     try {
       setStatus("Processing transfer...");
       setDisableAction(true);
@@ -65,7 +65,7 @@ console.log(status)
           )
         );
       }
-const value = BigInt(Number(amount) * 10 ** 6)
+      const value = BigInt(Number(amount) * 10 ** 6);
       // Add transfer instruction
       transaction.add(
         createTransferInstruction(
@@ -94,16 +94,13 @@ const value = BigInt(Number(amount) * 10 ** 6)
     }
   };
 
-
   return (
     <div className="bg-muted flex flex-col gap-4 p-4 py-6">
-       <div className="flex justify-between items-center">
-       
-          <p className="text-sm">
-            <span className="font-bold">$ROGUE: </span>
-            {balance ?? 0}
-          </p>
-      
+      <div className="flex justify-between items-center">
+        <p className="text-sm">
+          <span className="font-bold">$ROGUE: </span>
+          {balance ?? 0}
+        </p>
       </div>
       <div className="relative w-full">
         <Input
