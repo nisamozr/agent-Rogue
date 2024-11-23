@@ -5,7 +5,7 @@ import {
   Connection,
   PublicKey,
   Transaction,
-  TransactionConfirmationStrategy,
+  // TransactionConfirmationStrategy,
 } from "@solana/web3.js";
 import {
   getAssociatedTokenAddress,
@@ -30,7 +30,7 @@ const TeerminalBox = () => {
   const [topic, setTopic] = useState(""); // Default amount
   const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
-  const amount = BigInt(50000 * (10 ** 6))
+  const amount = BigInt(50000 * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
 
@@ -95,40 +95,61 @@ const TeerminalBox = () => {
       const signature = await connection.sendRawTransaction(signed.serialize());
       console.log(signature);
 
-      const response = await axios.post(
-        "https://agent-paywall.up.railway.app/submit-topic",
-        { topic: topic, hash: signature },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response, "response");
-      if (response.status == 500) {
-        toast({
-          title: " Faild to inject topic ",
-        });
-      }
-      if (response.status == 200) {
-        toast({
-          title: " Topic injection is successufll",
-        });
-        const confirmationStrategy: TransactionConfirmationStrategy = {
-          signature,
-          blockhash: latestBlockhash.blockhash,
-          lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-        };
-        const confirmation =
-          await connection.confirmTransaction(confirmationStrategy);
-        if (confirmation.value.err) {
-          throw new Error("Transaction failed to confirm");
-        }
-        console.log(confirmation);
+      // const confirmationStrategy: TransactionConfirmationStrategy = {
+      //   signature,
+      //   blockhash: latestBlockhash.blockhash,
+      //   lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+      // };
 
-        setStatus("Transfer successful! Signature: " + signature);
-        setLoading(false);
-      }
+      setTimeout(async() => {
+        const response = await axios.post(
+          "https://agent-paywall.up.railway.app/submit-topic",
+          { topic: topic, hash: signature },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response, "response");
+        if (response.status == 500) {
+          toast({
+            title: " Faild to inject topic ",
+          });
+        }
+        if (response.status == 200) {
+          toast({
+            title: " Topic injection is successufll",
+          });
+         
+          // console.log(confirmation);
+  
+          setStatus("Transfer successful! Signature: " + signature);
+          setLoading(false);
+        }
+      }, 15000);
+      // const confirmation =
+      //   await connection.confirmTransaction(confirmationStrategy);
+      // if (confirmation.value.err) {
+      //   throw new Error("Transaction failed to confirm");
+      // } else {
+      //   const txInfo = await connection.getTransaction(signature, {
+      //     maxSupportedTransactionVersion: 0, // Support legacy and v0 transactions
+      //   });
+
+       
+
+      //   if (txInfo?.meta?.err) {
+      //     setStatus("failed");
+      //     // toast({
+      //     //   title: " failed",
+      //     // });
+      //   } else {
+      //     setStatus("success");
+      //   }
+      // }
+
+     
     } catch (err: any) {
       // setStatus("Error: " + err.message);
       setLoading(false);
