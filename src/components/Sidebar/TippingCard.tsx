@@ -112,7 +112,7 @@ const TippingCard = ({ close }: { close: any }) => {
           onChange={(e) => setAmount(e.target.value)}
         />
         <div className="absolute right-4 top-0 h-full flex justify-center items-center">
-          <p className="text-[14px] ">$host</p>
+          <p className="text-[14px] ">$ROGUE</p>
         </div>
       </div>
 
