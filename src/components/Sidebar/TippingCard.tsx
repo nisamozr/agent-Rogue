@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-
-// import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 import { useAppCtx } from "@/context/app.contex";
 import { useToast } from "@/hooks/use-toast";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -15,12 +13,12 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
+import { setTimeout } from "timers";
 const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
 const TippingCard = ({ close }: { close: any }) => {
   const [amount, setAmount] = useState<string>("");
-  // const { tokenBalance } = useGetTokenBalance();
-  // const { toast } = useToast();
+
   const { disableAction, setDisableAction } = useAppCtx();
   const { toast } = useToast();
   const [status, setStatus] = useState("");
@@ -31,6 +29,11 @@ const TippingCard = ({ close }: { close: any }) => {
     if (amount === "") {
       toast({
         title: "Enter your Amount",
+      });
+      return false;
+    } else if (balance < Number(amount)) {
+      toast({
+        title: "Insufficient Balance",
       });
       return false;
     }
@@ -87,6 +90,14 @@ const TippingCard = ({ close }: { close: any }) => {
 
       const signature = await connection.sendRawTransaction(signed.serialize());
       console.log(signature);
+      setTimeout(() => {
+        // sends({ user: address, text: `message` });
+        toast({
+          title: "Transaction completed successfully",
+        });
+        setAmount("");
+        setDisableAction(false);
+      }, 8000);
     } catch (err: any) {
       setDisableAction(false);
 

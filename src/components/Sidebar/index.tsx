@@ -12,6 +12,7 @@ import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
+import CharacterBox from "./CharacterBox";
 // import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 
 const Sidebar = () => {
@@ -37,7 +38,7 @@ const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "h-full gap-4 px-4 py-2 flex bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col ",
+        "h-full gap-4 px-4 py-2 flex bg-card fixed top-0 right-0 overflow-hidden text-nowrap font-sans text-lg  z-10 flex-col border-l",
         "transition-all duration-300 ease-in-out",
         hideSidebar ? "w-[auto]" : "w-[400px]",
         "-md:hidden"
@@ -81,7 +82,13 @@ const Sidebar = () => {
           <div className="flex flex-col gap-5 h-full">
             <Tabs />
             <div className="grow  h-4">
-              {sidebarMenu === "global" ? <GlobelBox /> : <TeerminalBox />}
+              {sidebarMenu === "global" ? (
+                <GlobelBox />
+              ) : sidebarMenu === "inject" ? (
+                <TeerminalBox />
+              ) : (
+                <CharacterBox />
+              )}
             </div>
             {connected ? null : (
               <div>

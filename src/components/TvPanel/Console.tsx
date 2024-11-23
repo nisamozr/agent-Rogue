@@ -83,7 +83,7 @@ const TvConsole = () => {
   };
 
   return (
-    <div className="w-10/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0 -md:grid-rows-[1fr_25px]">
+    <div className="w-9/12 aspect-video bg-accent border-4 rounded-lg relative overflow-hidden grid grid-rows-[1fr_50px] gap-0 -md:grid-rows-[1fr_25px]">
       <div
         className={cn(
           "w-full h-full border-4 border-zinc-900 overflow-hidden transition-all",

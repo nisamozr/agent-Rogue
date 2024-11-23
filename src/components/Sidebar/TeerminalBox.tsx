@@ -19,6 +19,7 @@ import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
+import { useAppCtx } from "@/context/app.contex";
 
 const recipientAddress = import.meta.env.VITE_BANK;
 
@@ -33,19 +34,28 @@ const TeerminalBox = () => {
   const amount = BigInt(20000 * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
+  const { disableAction, setDisableAction } = useAppCtx();
 
   const transferTokens = async () => {
     if (topic === "") {
       toast({
         title: "Enter your Topic",
-      });
+      })
       return false;
     }
+    else if(balance < 20000){
+      toast({
+          title: "Insufficient Balance",
+        });
+    return false;
+
+  }
     if (!publicKey || !signTransaction) return;
 
     try {
       setStatus("Processing transfer...");
       setLoading(true);
+      setDisableAction(true);
 
       const mintPubkey = new PublicKey(import.meta.env.VITE_SPL_TOKEN_ADDRESS);
       const recipientPubKey = new PublicKey(recipientAddress);
@@ -111,7 +121,7 @@ const TeerminalBox = () => {
             },
           }
         );
-        console.log(response, "response");
+    
         if (response.status == 500) {
           toast({
             title: " Faild to inject topic ",
@@ -126,7 +136,13 @@ const TeerminalBox = () => {
 
           setStatus("Transfer successful! Signature: " + signature);
           setLoading(false);
+          setTopic("")
         }
+
+        toast({
+          title: "Transaction completed successfully",
+        });
+        setDisableAction(false);
       }, 15000);
       // const confirmation =
       //   await connection.confirmTransaction(confirmationStrategy);
@@ -149,6 +165,8 @@ const TeerminalBox = () => {
     } catch (err: any) {
       // setStatus("Error: " + err.message);
       setLoading(false);
+      setDisableAction(false);
+
       toast({
         title: " Error",
         description: err.message,
@@ -168,15 +186,15 @@ const TeerminalBox = () => {
       </div>
       <div className="flex flex-col gap-2">
         <Textarea
-          className="h-[100px]"
+          className="h-[100px] uppercase"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder="Inject your topic here"
         />
         <Button
-          className="w-full"
+          className="w-full uppercase"
           onClick={transferTokens}
-          disabled={loading || !connected}
+          disabled={loading || !connected || disableAction} 
         >
           {loading ? status : `Add with 20k $ROGUE`}
         </Button>
