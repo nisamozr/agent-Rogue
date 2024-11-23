@@ -4,72 +4,111 @@ import { Button } from "../ui/button";
 
 // import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 import { useAppCtx } from "@/context/app.contex";
+import { useToast } from "@/hooks/use-toast";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Connection, PublicKey, Transaction } from "@solana/web3.js";
+import {
+  createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
+  getAccount,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
+const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
 const TippingCard = ({ close }: { close: any }) => {
   const [amount, setAmount] = useState<string>("");
   // const { tokenBalance } = useGetTokenBalance();
   // const { toast } = useToast();
   const { disableAction, setDisableAction } = useAppCtx();
-
+  const { toast } = useToast();
+  const [status, setStatus] = useState("");
+  const {  publicKey, signTransaction } = useWallet();
+  const { balance } = useTokenBalance(publicKey);
 
   const sendTip = async () => {
-    // console.log(Number(tokenBalance) , Number(amount))
-    // if (amount == "") {
-    //   toast({
-    //     title: "Enter your Amount",
-
-    //     // description: "Friday, February 10, 2023 at 5:57 PM",
-    //   });
-    //   return false;
-    // } else if (Number(tokenBalance) < Number(amount) || tokenBalance == null) {
-    //   toast({
-    //     title: "Insufficient Balance for Transfer. ",
-
-    //     description: "Please Purchase More Tokens.",
-    //   });
-    //   return false;
-
-    // }
-
+    if (amount === "") {
+      toast({
+        title: "Enter your Amount",
+      });
+      return false;
+    }
+    if (!publicKey || !signTransaction) return;
+console.log(status)
     try {
-      setDisableAction(true)
-      // const transaction
+      setStatus("Processing transfer...");
+      setDisableAction(true);
 
-      // // Get the provider from wagmi
+      const mintPubkey = new PublicKey(import.meta.env.VITE_SPL_TOKEN_ADDRESS);
+      const recipientPubKey = new PublicKey(import.meta.env.VITE_BANK);
 
-      // const res = await transaction;
-      // console.log("res", res);
+      // Get the associated token accounts for sender and recipient
+      const senderATA = await getAssociatedTokenAddress(mintPubkey, publicKey);
+      const recipientATA = await getAssociatedTokenAddress(
+        mintPubkey,
+        recipientPubKey
+      );
 
-      // if (res) {
-      // setDisableAction(false)
+      const transaction = new Transaction();
 
-      //   const receipt = await waitForTransactionReceipt(evm_config, {
-      //     hash: res, // Use the hash from the transaction object
-      //   });
+      // Check if recipient's ATA exists, if not, create it
+      try {
+        await getAccount(connection, recipientATA);
+      } catch (e) {
+        transaction.add(
+          createAssociatedTokenAccountInstruction(
+            publicKey,
+            recipientATA,
+            recipientPubKey,
+            mintPubkey
+          )
+        );
+      }
+const value = BigInt(Number(amount) * 10 ** 6)
+      // Add transfer instruction
+      transaction.add(
+        createTransferInstruction(
+          senderATA,
+          recipientATA,
+          publicKey,
+          BigInt(value), // amount is in base units
+          [],
+          TOKEN_PROGRAM_ID
+        )
+      );
 
-      //   if (receipt) {
-      //     console.log(receipt, "receipt");
-      //     toast({
-      //       title: "Transaction Successful! ",
-    
-      //       description: "Your tokens have been transferred successfully.",
-      //     });
-      //     setAmount('')
-      //   }
-      // }
-    } catch (error) {
-      setDisableAction(false)
+      // Sign and send transaction
+      const latestBlockhash = await connection.getLatestBlockhash();
 
-      console.error("Transaction error:", error);
+      transaction.recentBlockhash = latestBlockhash.blockhash;
+      transaction.feePayer = publicKey;
+      const signed = await signTransaction(transaction);
+
+      const signature = await connection.sendRawTransaction(signed.serialize());
+      console.log(signature);
+    } catch (err: any) {
+      setDisableAction(false);
+
+      console.error("Transaction error:", err);
     }
   };
+
+
   return (
     <div className="bg-muted flex flex-col gap-4 p-4 py-6">
+       <div className="flex justify-between items-center">
+       
+          <p className="text-sm">
+            <span className="font-bold">$ROGUE: </span>
+            {balance ?? 0}
+          </p>
+      
+      </div>
       <div className="relative w-full">
         <Input
           // className="py-4 px-4"
           className="pr-[70px] hover:border-[#B5B6B7] hover:bg-[#303030]"
-
           value={amount}
           type="number"
           placeholder="0.00"
@@ -82,7 +121,7 @@ const TippingCard = ({ close }: { close: any }) => {
 
       <div className="flex gap-2">
         <Button
-        disabled={disableAction}
+          disabled={disableAction}
           className="bg-[#444746] w-full text-primary"
           onClick={() => close(false)}
         >

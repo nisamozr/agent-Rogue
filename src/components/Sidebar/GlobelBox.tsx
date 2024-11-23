@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { ICONS } from "@/assets";
 
 const GlobelBox = () => {
   const { connected, publicKey } = useWallet();
@@ -100,7 +101,7 @@ const address :any=publicKey?.toString()
               <SendHorizontalIcon />
             </Button>
           </div>
-          {/* {showTipAgent ? null : (
+          {showTipAgent ? null : (
             <Button
               disabled={disableAction}
               onClick={() => setsTipAgent(true)}
@@ -108,7 +109,7 @@ const address :any=publicKey?.toString()
             >
               <img src={ICONS.icon_tip__btn} alt="" />
             </Button>
-          )} */}
+          )}
         </div>
       ) : null}
     </div>
