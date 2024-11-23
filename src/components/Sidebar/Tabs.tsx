@@ -2,7 +2,7 @@ import { useAppCtx } from "@/context/app.contex";
 import { Button } from "../ui/button";
 
 const Tabs = () => {
-  const types = ["global"];
+  const types = ["global", "Inject"];
   const { setSidebarMenu ,sidebarMenu} = useAppCtx();
 
   return (

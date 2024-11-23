@@ -2,35 +2,34 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
-import { useToast } from "@/hooks/use-toast";
-import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
+// import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 import { useAppCtx } from "@/context/app.contex";
 
 const TippingCard = ({ close }: { close: any }) => {
   const [amount, setAmount] = useState<string>("");
-  const { tokenBalance } = useGetTokenBalance();
-  const { toast } = useToast();
+  // const { tokenBalance } = useGetTokenBalance();
+  // const { toast } = useToast();
   const { disableAction, setDisableAction } = useAppCtx();
 
 
   const sendTip = async () => {
-    console.log(Number(tokenBalance) , Number(amount))
-    if (amount == "") {
-      toast({
-        title: "Enter your Amount",
+    // console.log(Number(tokenBalance) , Number(amount))
+    // if (amount == "") {
+    //   toast({
+    //     title: "Enter your Amount",
 
-        // description: "Friday, February 10, 2023 at 5:57 PM",
-      });
-      return false;
-    } else if (Number(tokenBalance) < Number(amount) || tokenBalance == null) {
-      toast({
-        title: "Insufficient Balance for Transfer. ",
+    //     // description: "Friday, February 10, 2023 at 5:57 PM",
+    //   });
+    //   return false;
+    // } else if (Number(tokenBalance) < Number(amount) || tokenBalance == null) {
+    //   toast({
+    //     title: "Insufficient Balance for Transfer. ",
 
-        description: "Please Purchase More Tokens.",
-      });
-      return false;
+    //     description: "Please Purchase More Tokens.",
+    //   });
+    //   return false;
 
-    }
+    // }
 
     try {
       setDisableAction(true)

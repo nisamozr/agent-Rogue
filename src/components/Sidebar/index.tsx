@@ -11,22 +11,29 @@ import { Twitter, X } from "lucide-react";
 import CustomSolanaButton from "../WalletConnect/solConnectBtn";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useToast } from "@/hooks/use-toast";
+import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
+// import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 
 const Sidebar = () => {
-const {toast} = useToast()
+  const { toast } = useToast();
   const { connected, publicKey } = useWallet();
+  const { balance } = useTokenBalance(publicKey);
+
   const address: any = publicKey?.toString();
 
   const config = genConfig(address);
 
   const { setHideSidebar, hideSidebar, sidebarMenu } = useAppCtx();
 
-  const copy = async()=>{
-    await navigator.clipboard.writeText("27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL");
+  const copy = async () => {
+    console.log(balance);
+    await navigator.clipboard.writeText(
+      "27yzfJSNvYLBjgSNbMyXMMUWzx6T9q4B9TP8Jt8MZ9mL"
+    );
     toast({
       title: "The contract address has been copied to the clipboard.",
     });
-  }
+  };
   return (
     <aside
       className={cn(
@@ -91,12 +98,17 @@ const {toast} = useToast()
 
             <div className="flex justify-between items-center">
               {/* <p className="text-[14px] ">$host: {tokenBalance ?? 0}</p> */}
-             
-              <Button variant={"ghost"} onClick={()=>open("https://x.com/0xRogueAgent","_brace")}>
+
+              <Button
+                variant={"ghost"}
+                onClick={() => open("https://x.com/0xRogueAgent", "_brace")}
+              >
                 <Twitter />
               </Button>
 
-              <Button onClick={()=>copy()} variant={"ghost"}>CA:27yzfJ......t8MZ9mL</Button>
+              <Button onClick={() => copy()} variant={"ghost"}>
+                CA:27yzfJ......t8MZ9mL
+              </Button>
             </div>
           </div>
         )}
