@@ -61,7 +61,7 @@ const CharacterBox = () => {
 
   const [selectedCharacter, setSelectedCharacter] = useState<any>(null);
   const { toast } = useToast();
-  const { publicKey, signTransaction } = useWallet();
+  const { publicKey, signTransaction,connected } = useWallet();
   const { balance } = useTokenBalance(publicKey);
   const { disableAction, setDisableAction } = useAppCtx();
   const [status, setStatus] = useState("");
@@ -168,7 +168,7 @@ const CharacterBox = () => {
       <div className="flex gap-2">
         <div className="relative w-full">
           <Button
-              disabled={disableAction}
+              disabled={disableAction || !connected}
               onClick={updateChacter}
             //   variant={"ghost"}
             className="w-full"
