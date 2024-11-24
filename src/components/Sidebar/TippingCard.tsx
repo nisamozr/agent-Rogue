@@ -13,7 +13,6 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
-import { setTimeout } from "timers";
 const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
 const TippingCard = ({ close }: { close: any }) => {
@@ -90,17 +89,44 @@ const TippingCard = ({ close }: { close: any }) => {
 
       const signature = await connection.sendRawTransaction(signed.serialize());
       console.log(signature);
-      setTimeout(() => {
-        // sends({ user: address, text: `message` });
-        toast({
-          title: "Transaction completed successfully",
-        });
-        setAmount("");
-        setDisableAction(false);
-      }, 8000);
+
+      // Wait for transaction confirmation
+      const confirmation = await connection.confirmTransaction(
+        {
+          signature,
+          blockhash: latestBlockhash.blockhash,
+          lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        },
+        "confirmed"
+      );
+
+      if (confirmation.value.err) {
+        throw new Error("Transaction failed");
+      }
+
+      // Verify the transaction was successful
+      const txInfo = await connection.getParsedTransaction(signature, {
+        maxSupportedTransactionVersion: 0,
+      });
+
+      if (txInfo?.meta?.err) {
+        throw new Error("Transaction failed during execution");
+      }
+      console.log(txInfo, "txInfo");
+
+      // setTimeout(() => {
+      // sends({ user: address, text: `message` });
+      toast({
+        title: "Transaction completed successfully",
+      });
+      setAmount("");
+      setDisableAction(false);
+      // }, 8000);
     } catch (err: any) {
       setDisableAction(false);
-
+      toast({
+        title: "Transaction error",
+      });
       console.error("Transaction error:", err);
     }
   };

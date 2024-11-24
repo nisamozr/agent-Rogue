@@ -61,7 +61,7 @@ const CharacterBox = () => {
 
   const [selectedCharacter, setSelectedCharacter] = useState<any>(null);
   const { toast } = useToast();
-  const { publicKey, signTransaction,connected } = useWallet();
+  const { publicKey, signTransaction, connected } = useWallet();
   const { balance } = useTokenBalance(publicKey);
   const { disableAction, setDisableAction } = useAppCtx();
   const [status, setStatus] = useState("");
@@ -72,13 +72,11 @@ const CharacterBox = () => {
         title: "Select a character",
       });
       return false;
-    }
-    else if(balance < selectedCharacter?.amount){
-        toast({
-            title: "Insufficient Balance",
-          });
+    } else if (balance < selectedCharacter?.amount) {
+      toast({
+        title: "Insufficient Balance",
+      });
       return false;
-
     }
     if (!publicKey || !signTransaction) return;
     console.log(status);
@@ -132,15 +130,34 @@ const CharacterBox = () => {
       const signed = await signTransaction(transaction);
 
       const signature = await connection.sendRawTransaction(signed.serialize());
-      console.log(signature);
-      setTimeout(() => {
-        toast({
-            title: "Transaction completed successfully",
-          });
-          setSelectedCharacter(null)
-      setDisableAction(false);
+      // Wait for transaction confirmation
+      const confirmation = await connection.confirmTransaction(
+        {
+          signature,
+          blockhash: latestBlockhash.blockhash,
+          lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        },
+        "confirmed"
+      );
 
-      }, 8000);
+      if (confirmation.value.err) {
+        throw new Error("Transaction failed");
+      }
+
+      // Verify the transaction was successful
+      const txInfo = await connection.getParsedTransaction(signature, {
+        maxSupportedTransactionVersion: 0,
+      });
+
+      if (txInfo?.meta?.err) {
+        throw new Error("Transaction failed during execution");
+      }
+
+      toast({
+        title: "Transaction completed successfully",
+      });
+      setSelectedCharacter(null);
+      setDisableAction(false);
     } catch (err: any) {
       setDisableAction(false);
 
@@ -154,7 +171,9 @@ const CharacterBox = () => {
           {characterList?.map((item) => (
             <div
               className={`w-full h-[max-content] border border-input cursor-pointer ${selectedCharacter?.id === item.id ? "bg-primary text-primary-foreground" : "bg-[transparant]"} `}
-              onClick={() => disableAction ? null :setSelectedCharacter(item)}
+              onClick={() =>
+                disableAction ? null : setSelectedCharacter(item)
+              }
             >
               <img src={item.image} alt="" />
               <p className="text-sm uppercase py-[3px] text-center">
@@ -168,8 +187,8 @@ const CharacterBox = () => {
       <div className="flex gap-2">
         <div className="relative w-full">
           <Button
-              disabled={disableAction || !connected}
-              onClick={updateChacter}
+            disabled={disableAction || !connected}
+            onClick={updateChacter}
             //   variant={"ghost"}
             className="w-full"
           >

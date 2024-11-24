@@ -31,7 +31,7 @@ const TeerminalBox = () => {
   const [topic, setTopic] = useState(""); // Default amount
   const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
-  const amount = BigInt(20000 * 10 ** 6);
+  const amount = BigInt(20 * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
   const { disableAction, setDisableAction } = useAppCtx();
@@ -111,7 +111,28 @@ const TeerminalBox = () => {
       //   lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
       // };
 
-      setTimeout(async () => {
+       // Wait for transaction confirmation
+       const confirmation = await connection.confirmTransaction(
+        {
+          signature,
+          blockhash: latestBlockhash.blockhash,
+          lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        },
+        "confirmed"
+      );
+
+      if (confirmation.value.err) {
+        throw new Error("Transaction failed");
+      }
+
+      // Verify the transaction was successful
+      const txInfo = await connection.getParsedTransaction(signature, {
+        maxSupportedTransactionVersion: 0,
+      });
+
+      if (txInfo?.meta?.err) {
+        throw new Error("Transaction failed during execution");
+      }
         const response = await axios.post(
           "https://agent-paywall.up.railway.app/submit-topic",
           { topic: topic, hash: signature },
@@ -143,7 +164,6 @@ const TeerminalBox = () => {
           title: "Transaction completed successfully",
         });
         setDisableAction(false);
-      }, 15000);
       // const confirmation =
       //   await connection.confirmTransaction(confirmationStrategy);
       // if (confirmation.value.err) {
