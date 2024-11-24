@@ -158,11 +158,13 @@ const TeerminalBox = () => {
           setStatus("Transfer successful! Signature: " + signature);
           setLoading(false);
           setTopic("")
+        setDisableAction(false);
+
         }
 
-        toast({
-          title: "Transaction completed successfully",
-        });
+        // toast({
+        //   title: "Transaction completed successfully",
+        // });
         setDisableAction(false);
       // const confirmation =
       //   await connection.confirmTransaction(confirmationStrategy);
