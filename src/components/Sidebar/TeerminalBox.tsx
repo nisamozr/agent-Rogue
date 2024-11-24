@@ -31,7 +31,7 @@ const TeerminalBox = () => {
   const [topic, setTopic] = useState(""); // Default amount
   const connection = new Connection(import.meta.env.VITE_SOL_RPC);
 
-  const amount = BigInt(20 * 10 ** 6);
+  const amount = BigInt(20000 * 10 ** 6);
   // const { connection } = useConnection();
   const { toast } = useToast();
   const { disableAction, setDisableAction } = useAppCtx();
