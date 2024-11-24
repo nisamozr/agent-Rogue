@@ -13,6 +13,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTokenBalance } from "@/hooks/token/useGetTokenBalance";
 import CharacterBox from "./CharacterBox";
+import MainTerminal from "./MainTerminal";
 // import useGetTokenBalance from "@/hooks/token/useGetTokenBalance";
 
 const Sidebar = () => {
@@ -86,7 +87,11 @@ const Sidebar = () => {
                 <GlobelBox />
               ) : sidebarMenu === "inject" ? (
                 <TeerminalBox />
-              ) : (
+              ) :
+              
+              sidebarMenu === "terminal" ? (
+                <MainTerminal />
+              ) :(
                 <CharacterBox />
               )}
             </div>
