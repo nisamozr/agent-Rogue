@@ -166,24 +166,7 @@ const TeerminalBox = () => {
         //   title: "Transaction completed successfully",
         // });
         setDisableAction(false);
-      // const confirmation =
-      //   await connection.confirmTransaction(confirmationStrategy);
-      // if (confirmation.value.err) {
-      //   throw new Error("Transaction failed to confirm");
-      // } else {
-      //   const txInfo = await connection.getTransaction(signature, {
-      //     maxSupportedTransactionVersion: 0, // Support legacy and v0 transactions
-      //   });
-
-      //   if (txInfo?.meta?.err) {
-      //     setStatus("failed");
-      //     // toast({
-      //     //   title: " failed",
-      //     // });
-      //   } else {
-      //     setStatus("success");
-      //   }
-      // }
+    
     } catch (err: any) {
       // setStatus("Error: " + err.message);
       setLoading(false);
